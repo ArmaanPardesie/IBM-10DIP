@@ -1,0 +1,176 @@
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+def get_user_input():
+    return input("Enter 'YES' to enter data, 'NO' to terminate: ").upper()
+
+
+def cond_1():
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    frequencies = []
+
+    for day in days_of_week:
+        passengers = int(input(f"Enter the number of passengers commuting on {day} in early hours: "))
+        frequencies.append(passengers // 210)
+
+    display_results(frequencies, 'early hours')
+
+
+def cond_2():
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    frequencies = []
+
+    for day in days_of_week:
+        passengers = int(input(f"Enter the number of passengers commuting on {day} in mid hours: "))
+        frequencies.append(passengers // 210)
+
+    display_results(frequencies, 'mid hours')
+
+
+def cond_3():
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    frequencies = []
+
+    for day in days_of_week:
+        passengers = int(input(f"Enter the number of passengers commuting on {day} in late hours: "))
+        frequencies.append(passengers // 210)
+
+    display_results(frequencies, 'late hours')
+
+
+def cond_4():
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    total_frequencies = []
+
+    for section in ['early', 'mid', 'late']:
+        frequencies = []
+        for day in days_of_week:
+            passengers = int(input(f"Enter the number of passengers commuting on {day} in {section} hours: "))
+            frequencies.append(passengers // 210)
+        total_frequencies.append(frequencies)
+
+    display_total_results(total_frequencies)
+
+
+def cond_5():
+    print("DISCLAIMER: TO STUDY SEASON-BASED TRENDS IN RAIL TRAFFIC THROUGHOUT THE YEAR, A BASIC WEEKLY COMMUTE INPUT "
+          "WOULD BE REQUIRED, FOLLOWED BY INCREMENT AND DECREMENT IN IT, PER MONTH, TO ANALYSE AND GIVE RESULTS - GREATER "
+          "NASIK METRO RAIL CORPORATION // GOVT. OF INDIA & GOVT. OF MAHARASHTRA IN COOPERATION.")
+
+    consent = input("Do you give your consent to the disclaimer? (YES/NO): ").upper()
+
+    if consent != 'YES':
+        print("SERVICE TERMINATED, TO RESTART, KINDLY RUN AGAIN.")
+        return
+
+    basic_data = []
+    for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
+        passengers = int(input(f"Enter the number of passengers traveling on {day} (BASIC): "))
+        basic_data.append(passengers)
+
+    print("DATA SAVED.")
+
+    monthly_trends = []
+    for month in ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']:
+        trend = float(input(f"Enter the increment/decrement percentage for {month} (e.g., +5 or -3): "))
+        monthly_trends.append(trend)
+
+    apply_monthly_trends(basic_data, monthly_trends)
+
+
+def display_results(frequencies, hours):
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    popular_day = days_of_week[frequencies.index(max(frequencies))]
+    least_popular_day = days_of_week[frequencies.index(min(frequencies))]
+
+    print(f"\nMost popular {hours} day: {popular_day}")
+    print(f"Least popular {hours} day: {least_popular_day}")
+
+    for i, day in enumerate(days_of_week):
+        print(f"{day}: {frequencies[i]} frequency of metro service needed")
+
+
+def display_total_results(total_frequencies):
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    for i, section in enumerate(['Early', 'Mid', 'Late']):
+        frequencies = total_frequencies[i]
+        popular_day = days_of_week[frequencies.index(max(frequencies))]
+        least_popular_day = days_of_week[frequencies.index(min(frequencies))]
+
+        print(f"\nMost popular {section} hours day: {popular_day}")
+        print(f"Least popular {section} hours day: {least_popular_day}")
+
+        print(f"\n{section} hours:")
+        for j, day in enumerate(days_of_week):
+            print(f"{day}: {frequencies[j]} frequency of metro service needed")
+
+
+def apply_monthly_trends(basic_data, monthly_trends):
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    adjusted_data_list = []
+    for i, month in enumerate(months):
+        trend = monthly_trends[i]
+        adjusted_data = [round(day * (1 + trend / 100)) for day in basic_data]
+
+        print(f"\n{month}:")
+        for j, day in enumerate(days_of_week):
+            print(f"{day}: {adjusted_data[j]} frequency of metro service needed")
+
+        adjusted_data_list.append(adjusted_data)
+
+    total_traffic = sum(basic_data)
+    monthly_sums = [sum(adjusted_data) for adjusted_data in zip(*adjusted_data_list)]
+
+    popular_month = months[monthly_sums.index(max(monthly_sums))]
+    least_popular_month = months[monthly_sums.index(min(monthly_sums))]
+
+    print(f"\nMost popular month based on total traffic: {popular_month}")
+    print(f"Least popular month based on total traffic: {least_popular_month}")
+
+
+def main():
+    print("Welcome to the GREATER NASIK METRO interface!")
+
+    user_input = get_user_input()
+
+    if user_input == 'NO':
+        print("SERVICE TERMINATED, TO RESTART, KINDLY RUN AGAIN.")
+    elif user_input == 'YES':
+        service_frequency_input = input("Would you like to enter SERVICE FREQUENCY based data? (YES/NO): ").upper()
+        if service_frequency_input == 'NO':
+            print("SERVICE TERMINATED, TO RESTART, KINDLY RUN AGAIN.")
+        elif service_frequency_input == 'YES':
+            control_data_input = input("Are your inputs based on the NASIK MUNICIPAL CORPORATION's ROAD AND RAIL TRAFFIC CONTROL DATA? (YES/NO): ").upper()
+            if control_data_input == 'NO':
+                print("SERVICE TERMINATED, TO RESTART, KINDLY RUN AGAIN.")
+            elif control_data_input == 'YES':
+                hours_input = input("Choose a time period:\n"
+                                    "EH for early hours (5am-11.59am)\n"
+                                    "MH for mid hours (12pm-4.59pm)\n"
+                                    "LH for late hours (5pm-10.59pm)\n"
+                                    "WD for whole day\n"
+                                    "SS for SEASON-BASED SYSTEM\n").upper()
+
+                if hours_input == 'EH':
+                    cond_1()
+                elif hours_input == 'MH':
+                    cond_2()
+                elif hours_input == 'LH':
+                    cond_3()
+                elif hours_input == 'WD':
+                    cond_4()
+                elif hours_input == 'SS':
+                    cond_5()
+                else:
+                    print("Invalid input. SERVICE TERMINATED. TO RESTART, KINDLY RUN AGAIN.")
+            else:
+                print("Invalid input. SERVICE TERMINATED. TO RESTART, KINDLY RUN AGAIN.")
+        else:
+            print("SERVICE TERMINATED, TO RESTART, KINDLY RUN AGAIN.")
+    else:
+        print("Invalid input. SERVICE TERMINATED. TO RESTART, KINDLY RUN AGAIN.")
+
+
+if __name__ == "__main__":
+    main()
